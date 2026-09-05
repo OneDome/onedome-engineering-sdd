@@ -1,0 +1,65 @@
+# Per-task machine-readable state.
+# Copy of templates/task-state.yaml for DEAL-2097.
+
+schema_version: 1
+
+jira:
+  key: DEAL-2097
+  title: OD Mortgage Sourcing Phase 5
+
+lifecycle:
+  status: plan_approved
+
+sdd:
+  branch: null
+
+specification:
+  status: approved
+  path: spec.md
+  pr:
+    repository: null
+    number: null
+    url: null
+  approval:
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T17:19:00+03:00
+    method: chat
+    notes: Explicit phrase in chat: I approve this spec.
+
+planning:
+  status: approved
+  path: plan.md
+  pr:
+    repository: null
+    number: null
+    url: null
+  approval:
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T17:31:00+03:00
+    method: chat
+    notes: Explicit phrase in chat: I approve this plan.
+
+repositories:
+  - id: hub-service
+    path: hub-service
+    branch: null
+    impact: change
+    implementation_pr:
+      number: null
+      url: null
+  - id: integration-service
+    path: integration-service
+    branch: null
+    impact: change
+    implementation_pr:
+      number: null
+      url: null
+
+development:
+  developer: null
+  started_at: null
+  implementation_prs: []
+
+knowledge_updates: []
