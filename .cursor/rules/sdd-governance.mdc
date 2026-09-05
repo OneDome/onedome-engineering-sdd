@@ -1,0 +1,41 @@
+---
+description: Spec-Driven Development governance. Apply to every session in this workspace.
+alwaysApply: true
+---
+
+# SDD governance
+
+This repository is the SDD control plane. Application behaviour lives in other repositories in the same workspace.
+
+## Ownership
+
+- AI drafts `spec.md`. Humans own it. A Team Lead must approve it before planning or implementation.
+- Do not start `plan.md`, technical design, or code changes until `task-state.yaml` records `specification.status: approved`.
+- If asked to plan or implement without approval, refuse and point to the spec gate.
+- This phase: do not create git branches, remotes, or PRs. Do not update Jira statuses. Do not write to Confluence.
+
+## Evidence over invention
+
+- Never invent missing business behaviour, repository names, Jira fields, statuses, URLs, branch conventions, or undocumented rules.
+- Missing or conflicting information becomes an Open Question in `spec.md` with `id`, `blocking`, and `evidence_tried`. Do not silently resolve it.
+- Jira is the source of task requirements when a key is given (read-only). Confluence is supporting evidence via Atlassian MCP (read-only). Both may be incomplete or wrong.
+- Source code is the source of truth for current behaviour. Inspect local checkouts listed in `config/repositories.yaml` (under `IdeaProjects`). Do not invent repositories.
+- Every statement about existing behaviour should cite evidence when practical: Jira key, Confluence page id/URL, or local repository path.
+
+## Artifact roles
+
+- `spec.md` is WHAT and WHY only. No implementation choices.
+- `plan.md` is HOW only. It must not change approved behaviour; conflicts go back to the spec.
+- `templates/task-state.yaml` (copied per task) is the machine-readable lifecycle record. Automation must treat it as canonical.
+- Do not mix policy into `config/`. Do not mix environment values into this rule.
+
+## Scope and knowledge
+
+- Consider cross-repository impact. List affected repositories using ids from `config/repositories.yaml`. If the relevant checkout is not listed, add an Open Question.
+- Reusable knowledge is added incrementally after tasks complete. Documentation coverage is not a prerequisite for using SDD.
+- Treat `knowledge/` as possibly stale. Verify material claims against code before relying on them.
+- Do not create domain agents or invent architecture docs.
+
+## Secrets
+
+- Never write credentials, tokens, or secrets into this repository.

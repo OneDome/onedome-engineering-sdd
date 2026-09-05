@@ -1,0 +1,100 @@
+# Environment mapping. Policy lives in `.cursor/rules/sdd-governance.mdc`.
+# This phase: local code + Confluence read. No git, branches, or Jira status updates.
+
+schema_version: 1
+
+spec_kit:
+  status: not_initialized
+  integration: cursor
+  cli: null
+  constitution_path: null
+
+sources:
+  jira:
+    enabled: true                 # read requirements when a Jira key is given
+    write: false
+    status_updates: false         # later phase
+    base_url: https://onedome.atlassian.net
+    project_keys: []              # not required for this phase
+    status_mapping: {}            # unused until status-update phase
+  confluence:
+    enabled: true
+    write: false                  # analysis only; do not create or edit pages
+    mcp:
+      namespace: user-atlassian
+      cloud_id: 6626650e-3259-4866-8351-e63f19447ca3
+      site_host: onedome.atlassian.net
+    base_url: https://onedome.atlassian.net
+    wiki_base_url: https://onedome.atlassian.net/wiki
+    # Current global spaces discovered via Atlassian MCP. Search across these; do not assume one "engineering" space.
+    space_keys:
+      - HD
+      - MKT
+      - TEST
+      - ITi
+      - ITc
+      - BZS
+      - BZK
+      - GK
+      - BD
+      - BIKB
+      - K
+      - TKI
+      - CTP
+      - TPPIID
+      - CS
+      - OSD
+      - CSKB
+    tools:
+      search: searchConfluenceUsingCql
+      get_page: getConfluencePage
+      list_spaces: getConfluenceSpaces
+  source_code:
+    enabled: true
+    mode: local_checkout
+    workspace_root: /Users/oksanaodocuk/IdeaProjects
+
+git:
+  enabled: false                  # later phase: branches, PRs, status automation
+  branches: false
+  pull_requests: false
+  hosting: github
+  host_url: https://github.com
+  organization: OneDome
+  sdd_branch_pattern: null
+  implementation_branch_pattern: null
+  specification_pr_target_branch: null
+
+lifecycle:
+  allowed_statuses:
+    - specifying
+    - spec_review
+    - spec_approved
+    - planning
+    - plan_review
+    - plan_approved
+    - in_development
+    - in_review
+    - done
+    - blocked
+  gates:
+    planning_requires:
+      - specification.status == approved
+    implementation_requires:
+      - specification.status == approved
+
+approval:
+  specification_role: Team Lead
+  specification_method: task_state_file   # record in task-state.yaml; no Jira transition
+  planning_role: null
+  planning_method: null
+
+automation:
+  status: not_implemented
+  jira: false
+  confluence: false
+  github: false
+
+knowledge:
+  update_after: implementation
+  verify_against: source_code

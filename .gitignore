@@ -1,0 +1,17 @@
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets and local environment — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.yaml
+secrets.yml
+
+# Local tooling
+*.log
+.specify/scripts/.cache/

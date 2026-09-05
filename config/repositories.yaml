@@ -1,0 +1,77 @@
+# Local checkout registry. No remotes, branches, or GitHub integration in this phase.
+# Policy: `.cursor/rules/sdd-governance.mdc`.
+
+schema_version: 1
+
+workspace:
+  root: /Users/oksanaodocuk/IdeaProjects
+  layout: parent_folder           # application git repos are sibling directories
+
+# id is the local directory name. path is relative to workspace.root.
+# Do not invent additional repositories. If a checkout is missing, add an Open Question.
+repositories:
+  - id: ai-templates
+    path: ai-templates
+  - id: ai_pma_bot
+    path: ai_pma_bot
+  - id: airsync
+    path: airsync
+  - id: api-edge
+    path: api-edge
+  - id: butler
+    path: butler
+  - id: conveyancing-market
+    path: conveyancing-market
+  - id: deals-service
+    path: deals-service
+  - id: deliveryboy
+    path: deliveryboy
+  - id: devops-tools
+    path: devops-tools
+  - id: email-template-manager
+    path: email-template-manager
+  - id: foundation
+    path: foundation
+  - id: frontend-search
+    path: frontend-search
+  - id: governor
+    path: governor
+  - id: grant-planner-backend
+    path: grant-planner-backend
+  - id: hub-service
+    path: hub-service
+  - id: integration-service
+    path: integration-service
+  - id: messenger-service
+    path: messenger-service
+  - id: movedin-common
+    path: movedin-common
+  - id: movedin-edge
+    path: movedin-edge
+  - id: movedin-lambdas
+    path: movedin-lambdas
+  - id: movedin-messaging
+    path: movedin-messaging
+  - id: movedin-portal
+    path: movedin-portal
+  - id: multiplexer
+    path: multiplexer
+  - id: narwhal-functions
+    path: narwhal-functions
+  - id: sherlock
+    path: sherlock
+  - id: shopkeeper
+    path: shopkeeper
+  - id: tickets-service
+    path: tickets-service
+  - id: trigger
+    path: trigger
+  - id: trigger-configuration
+    path: trigger-configuration
+  - id: zd-lime-functions
+    path: zd-lime-functions
+
+sdd_repository:
+  id: onedome-engineering-sdd
+  path: onedome-engineering-sdd
+  git_remote: https://github.com/OneDome/onedome-engineering-sdd.git

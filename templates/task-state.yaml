@@ -1,0 +1,70 @@
+# Per-task machine-readable state.
+# Copy to specs/<JIRA-KEY>/task-state.yaml.
+# Canonical for automation. Humans approve specs; this file records that fact.
+# Use null for unknown values. Do not invent keys, URLs, usernames, or branch names.
+
+schema_version: 1
+
+jira:
+  key: null                       # required once work starts
+  title: null
+
+lifecycle:
+  # Allowed values: config/workflow.yaml lifecycle.allowed_statuses
+  status: specifying
+
+sdd:
+  branch: null                    # branch in this SDD repository; pattern is TODO in workflow.yaml
+
+specification:
+  status: draft                   # draft | in_review | approved | changes_requested | rejected
+  path: spec.md
+  pr:
+    repository: null              # this SDD repo once hosting is configured
+    number: null
+    url: null
+  approval:
+    approved: false
+    role: Team Lead
+    approver: null                # identity from the real process; do not invent
+    approved_at: null             # ISO-8601
+    method: null                  # TODO: see config/workflow.yaml approval.specification_method
+    notes: null
+
+planning:
+  status: not_started             # not_started | draft | in_review | approved | changes_requested | rejected
+  path: plan.md
+  pr:
+    repository: null
+    number: null
+    url: null
+  approval:
+    approved: false
+    role: null                    # TODO: config/workflow.yaml approval.planning_role
+    approver: null
+    approved_at: null
+    method: null
+    notes: null
+
+repositories: []
+  # - id: null                    # must match config/repositories.yaml[].id when registry is populated
+  #   path: null
+  #   branch: null                # implementation branch; pattern TODO in workflow.yaml
+  #   impact: null                # none | read | change
+  #   implementation_pr:
+  #     number: null
+  #     url: null
+
+development:
+  developer: null                 # identity from the real process; do not invent
+  started_at: null                # ISO-8601
+  implementation_prs: []
+    # - repository_id: null
+    #   number: null
+    #   url: null
+    #   status: null              # TODO: hosting-specific
+
+knowledge_updates: []
+  # - path: null                  # path under knowledge/
+  #   action: null                # add | update | verify
+  #   notes: null
