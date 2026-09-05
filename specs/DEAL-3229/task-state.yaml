@@ -1,0 +1,81 @@
+# Per-task machine-readable state.
+# Canonical for automation. Humans approve specs; this file records that fact.
+
+schema_version: 1
+
+jira:
+  key: DEAL-3229
+  title: Add a new notification type and update users about new comments on tasks in DR
+
+lifecycle:
+  status: plan_approved
+
+sdd:
+  branch: sdd/DEAL-3229
+
+specification:
+  status: approved
+  path: spec.md
+  pr:
+    repository: null
+    number: null
+    url: null
+  approval:
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T21:37:00+03:00
+    method: chat
+    notes: Explicit phrase in chat: I approve this spec.
+
+planning:
+  status: approved
+  path: plan.md
+  pr:
+    repository: null
+    number: null
+    url: null
+  approval:
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T21:38:00+03:00
+    method: chat
+    notes: Explicit phrase in chat: I approve this plan.
+
+repositories:
+  - id: deals-service
+    path: deals-service
+    branch: null
+    impact: change
+    implementation_pr:
+      number: null
+      url: null
+  - id: tickets-service
+    path: tickets-service
+    branch: null
+    impact: change
+    implementation_pr:
+      number: null
+      url: null
+  - id: movedin-lambdas
+    path: movedin-lambdas
+    branch: null
+    impact: none
+    implementation_pr:
+      number: null
+      url: null
+
+development:
+  status: not_started
+  developer: null
+  started_at: null
+  decomposition:
+    status: pending
+    approved_by: null
+    approved_at: null
+    method: null
+  current_subtask: null
+  subtasks: []
+  knowledge_candidates: []
+  implementation_prs: []
+
+knowledge_updates: []
