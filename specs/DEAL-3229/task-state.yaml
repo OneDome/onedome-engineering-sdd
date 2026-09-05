@@ -8,7 +8,7 @@ jira:
   title: Add a new notification type and update users about new comments on tasks in DR
 
 lifecycle:
-  status: plan_approved
+  status: in_review
 
 sdd:
   branch: sdd/DEAL-3229
@@ -44,18 +44,18 @@ planning:
 repositories:
   - id: deals-service
     path: deals-service
-    branch: null
+    branch: feature/DEAL-3229
     impact: change
     implementation_pr:
-      number: null
-      url: null
+      number: 997
+      url: https://github.com/OneDome/deals-service/pull/997
   - id: tickets-service
     path: tickets-service
-    branch: null
+    branch: feature/DEAL-3229
     impact: change
     implementation_pr:
-      number: null
-      url: null
+      number: 284
+      url: https://github.com/OneDome/tickets-service/pull/284
   - id: movedin-lambdas
     path: movedin-lambdas
     branch: null
@@ -65,17 +65,53 @@ repositories:
       url: null
 
 development:
-  status: not_started
-  developer: null
-  started_at: null
+  status: implementation_complete
+  developer: oksanaodocuk
+  started_at: 2026-09-05T21:42:00+03:00
   decomposition:
-    status: pending
-    approved_by: null
-    approved_at: null
-    method: null
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T21:42:00+03:00
+    method: chat
   current_subtask: null
-  subtasks: []
-  knowledge_candidates: []
-  implementation_prs: []
+  subtasks:
+    - id: DEV-01
+      title: Add COMMENT type, DEAL_COMMENT_NOTIFICATION category, and commentsTab mapping
+      repositories:
+        - deals-service
+        - tickets-service
+      acceptance_criteria:
+        - AC-003
+        - AC-004
+      depends_on: []
+      tests: Constants COMMENT / DEAL_COMMENT_NOTIFICATION in both repos; tickets type-group Set.of(COMMENT); ES mapping has commentsTab
+      status: completed
+    - id: DEV-02
+      title: Emit COMMENT notifications with new body, recipients, and redirect
+      repositories:
+        - deals-service
+      acceptance_criteria:
+        - AC-001
+        - AC-002
+        - AC-003
+        - AC-004
+        - AC-005
+      depends_on:
+        - DEV-01
+      tests: Unit tests for sendCommentAddedNotification covering recipients, author exclusion, type, category, body, redirect params
+      status: completed
+  knowledge_candidates:
+    - type: other
+      note: Application (business) repo PRs must include #deploy in the title (e.g. DEAL-3229 #deploy …). Does not apply to onedome-engineering-sdd PRs.
+      discovered_during: start-development
+  implementation_prs:
+    - repository_id: deals-service
+      number: 997
+      url: https://github.com/OneDome/deals-service/pull/997
+      status: open
+    - repository_id: tickets-service
+      number: 284
+      url: https://github.com/OneDome/tickets-service/pull/284
+      status: open
 
 knowledge_updates: []
