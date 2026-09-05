@@ -11,15 +11,15 @@ lifecycle:
   status: plan_approved
 
 sdd:
-  branch: null
+  branch: sdd/DEAL-2097
 
 specification:
   status: approved
   path: spec.md
   pr:
-    repository: null
-    number: null
-    url: null
+    repository: onedome-engineering-sdd
+    number: 1
+    url: https://github.com/OneDome/onedome-engineering-sdd/pull/1
   approval:
     status: approved
     approved_by: oksanaodocuk
@@ -31,9 +31,9 @@ planning:
   status: approved
   path: plan.md
   pr:
-    repository: null
-    number: null
-    url: null
+    repository: onedome-engineering-sdd
+    number: 1
+    url: https://github.com/OneDome/onedome-engineering-sdd/pull/1
   approval:
     status: approved
     approved_by: oksanaodocuk
