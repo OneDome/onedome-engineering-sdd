@@ -1,73 +1,140 @@
 ---
 schema_version: 1
 jira_key: null
-title: null
-status: draft                     # draft | in_review | approved | changes_requested | rejected
+jira_title: null
+status: draft
+created_at: null
+updated_at: null
+approval:
+  status: pending
+  approved_by: null
+  approved_at: null
 ---
 
 # Specification: `<JIRA-KEY>`
 
-WHAT and WHY only. Do not describe HOW. Fill from evidence. Do not invent behaviour.
+DRAFT **backend** business specification. WHAT and WHY only. Fill from evidence. Do not invent behaviour. Do not describe HOW. Do not specify frontend/UI.
 
-## Summary
+The Specification Agent must leave `status: draft` and `approval.status: pending` while drafting. Human Approval is an explicit phrase in chat (`затверджую` / `I approve this spec`); the agent then records it. Job title is irrelevant.
 
-<!-- One short paragraph. -->
+## Distinctions
 
-## Background
+| Kind | Where it belongs |
+| --- | --- |
+| Explicitly requested future behaviour | Expected Behaviour, Business Rules, Acceptance Criteria |
+| Verified current behaviour | Current Behaviour |
+| Assumptions | Assumptions (never copied into requirements) |
+| Unknowns | Open Questions |
 
-<!-- Why this change is needed, using Jira/Confluence evidence. -->
+## Business Context
 
-## Current behaviour
+<!-- Why the change is needed. Cite Jira/Confluence. -->
 
-<!-- What the system does today. Source of truth: source code. -->
+## Problem
 
-### Evidence
+<!-- The concrete problem being solved. -->
 
-| Claim | Kind | Reference |
+## Current Behaviour
+
+<!-- Only behaviour verified from code, Jira, Confluence, or previous approved specs. If a previous spec is used, verify material claims against code. If docs conflict with code, state both; code is implementation truth. -->
+
+## Expected Behaviour
+
+<!-- Requested future **backend** behaviour (APIs, events, persistence, jobs, server-side rules). No screens, CSS, or client app work. No implementation decisions unless they are explicit requirements in evidence. -->
+
+## User / System Flows
+
+<!-- Backend-observable scenarios (who/what calls the service, what is stored, what is returned or emitted). Omit UI walkthroughs. Omit rather than speculate. -->
+
+### Flow 1 — `<short name>`
+
+1. **Given** …
+2. **When** …
+3. **Then** …
+
+## Business Rules
+
+<!-- Number stably. Prefer fewer high-quality rules. -->
+
+- **BR-001:** …
+- **BR-002:** …
+
+## Acceptance Criteria
+
+<!-- Objectively verifiable. No hidden implementation. -->
+
+- **AC-001:** Given …, When …, Then …
+- **AC-002:** Given …, When …, Then …
+
+## Edge Cases
+
+<!-- Only from evidence, or point to an Open Question. -->
+
+- …
+
+## Assumptions
+
+<!-- Optional. Must not be treated as requirements. -->
+
+- …
+
+## Dependencies
+
+<!-- Other work, systems, or decisions this change depends on. Unknown → Open Question. -->
+
+- …
+
+## Potentially Affected Systems
+
+<!-- Preliminary. Backend checkouts only as delivery targets. Frontend may be listed as a consumer, not as work this spec will implement. Use ids from config/repositories.yaml when known. Do not invent names. -->
+
+| System / repository id | Why it might be affected | Confidence |
 | --- | --- | --- |
-| | jira \| confluence \| code | <!-- issue key, page URL/id, or repo-relative path --> |
+| | | low \| medium \| high |
 
-## Desired behaviour
+## Out of Scope
 
-<!-- Observable outcomes. If unknown, add an Open Question instead. -->
+<!-- Always include frontend/UI unless the user explicitly overrides this process (they should not). Add other non-goals from evidence. -->
 
-## Out of scope
-
-<!-- Explicit non-goals from evidence, or Open Questions if scope is unclear. -->
-
-## Impact
-
-### Affected repositories
-
-<!-- Use ids from config/repositories.yaml. If the registry is empty, list unknown and add Open Questions. Do not invent repository names. -->
-
-| Repository id | Impact | Notes |
-| --- | --- | --- |
-| | none \| read \| change | |
-
-### Cross-repository concerns
-
-<!-- Contracts, shared data, ordering, or unknown. -->
-
-## Acceptance criteria
-
-<!-- Given / When / Then. Each criterion must be testable without implementation detail. -->
-
-1. **Given** …, **When** …, **Then** …
-2. **Given** …, **When** …, **Then** …
+- Frontend / UI (screens, client apps, styling). SDD delivers backend only.
+- …
 
 ## Open Questions
 
-<!-- Required when evidence is missing or conflicting. Blocking questions prevent approval. -->
+<!-- Unresolved decisions only. Do not silently resolve. After Human Review answers an item: fold the answer into Expected Behaviour / Business Rules / Acceptance Criteria, then delete that OQ. Do not leave Closed stubs. Do not keep question-and-answer pairs in this section. -->
 
-```yaml
-- id: OQ-1
-  question: ""
-  blocking: true
-  evidence_tried: []              # jira | confluence | code | knowledge
-  resolution: null
-```
+### OQ-001
 
-## Knowledge notes
+- **Question:**
+- **Why it matters:**
+- **Evidence checked:**
+- **What cannot proceed safely without the answer:**
 
-<!-- Optional. Existing knowledge/ paths consulted and whether they were verified against code. -->
+### OQ-002
+
+- **Question:**
+- **Why it matters:**
+- **Evidence checked:**
+- **What cannot proceed safely without the answer:**
+
+## Evidence / References
+
+### Jira
+
+- <!-- key, field, or comment id -->
+
+### Confluence
+
+- <!-- space key, page id, title, URL -->
+
+### Source code
+
+- <!-- repository id + path -->
+
+### Previous specs
+
+- <!-- specs/<JIRA-KEY>/spec.md — note whether verified against code -->
+
+### Engineering knowledge
+
+- <!-- knowledge/ path — note whether verified against code -->

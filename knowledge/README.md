@@ -1,16 +1,18 @@
-# Reusable engineering knowledge
+# knowledge/
 
-Add notes here **incrementally** as SDD tasks complete. Coverage is not a prerequisite for using SDD.
+Reusable notes from **completed** SDD tasks. Process: see the root [README](../README.md) (collect during development, curate after).
 
-These files are supporting evidence, not the source of truth. **Source code is.** Existing notes may be stale; verify material claims against code before using them in a spec or plan.
+Source code remains the source of truth. Verify material claims against code before reuse.
 
-Do not invent architecture, domains, services, or integrations in order to look complete.
-
-| Directory | Holds |
+| Directory | For |
 | --- | --- |
-| `architecture/` | Cross-cutting technical facts that survived verification |
-| `domains/` | Business-domain notes learned from completed work |
-| `integrations/` | External-system integration notes |
-| `services/` | Per-service notes, keyed to `id` values in `config/repositories.yaml` |
+| `domains/` | Bounded business context (e.g. `domains/<context>/` when that area has recurred) |
+| `integrations/` | External systems / APIs |
+| `services/` | Per-service notes, keyed to `id` in `config/repositories.yaml` |
+| `architecture/` | Cross-cutting facts that survived verification |
 
-When a task produces a durable fact, record the path in that task's `task-state.yaml` `knowledge_updates` list.
+These directories are empty until a real task produces a note. Do not invent coverage.
+
+Include documentation references (Nuclino, Confluence, vendor docs) with what the doc is, which topic it covers, why it helps, and last-verified date when known.
+
+Record curated paths on the task’s `task-state.yaml` under `knowledge_updates`.

@@ -14,7 +14,7 @@ lifecycle:
   status: specifying
 
 sdd:
-  branch: null                    # branch in this SDD repository; pattern is TODO in workflow.yaml
+  branch: null                    # branch in this SDD repository; pattern sdd/<JIRA-KEY>
 
 specification:
   status: draft                   # draft | in_review | approved | changes_requested | rejected
@@ -24,11 +24,10 @@ specification:
     number: null
     url: null
   approval:
-    approved: false
-    role: Team Lead
-    approver: null                # identity from the real process; do not invent
+    status: pending               # pending | approved
+    approved_by: null             # resolved human identity; do not invent; do not store job title
     approved_at: null             # ISO-8601
-    method: null                  # TODO: see config/workflow.yaml approval.specification_method
+    method: null                  # chat when recorded from this conversation
     notes: null
 
 planning:
@@ -39,9 +38,8 @@ planning:
     number: null
     url: null
   approval:
-    approved: false
-    role: null                    # TODO: config/workflow.yaml approval.planning_role
-    approver: null
+    status: pending               # pending | approved
+    approved_by: null             # resolved human identity; do not invent; do not store job title
     approved_at: null
     method: null
     notes: null
@@ -49,20 +47,39 @@ planning:
 repositories: []
   # - id: null                    # must match config/repositories.yaml[].id when registry is populated
   #   path: null
-  #   branch: null                # implementation branch; pattern TODO in workflow.yaml
+  #   branch: null                # implementation branch; pattern feature/<JIRA-KEY> in workflow.yaml
   #   impact: null                # none | read | change
   #   implementation_pr:
   #     number: null
   #     url: null
 
 development:
+  status: not_started             # not_started | awaiting_breakdown_approval | in_progress | implementation_complete
   developer: null                 # identity from the real process; do not invent
   started_at: null                # ISO-8601
+  decomposition:
+    status: pending               # pending | approved
+    approved_by: null
+    approved_at: null             # ISO-8601
+    method: null                  # chat when recorded from this conversation
+  current_subtask: null           # DEV-01 … or null
+  subtasks: []
+    # - id: DEV-01
+    #   title: null
+    #   repositories: []          # ids from config/repositories.yaml
+    #   acceptance_criteria: []
+    #   depends_on: []
+    #   tests: null
+    #   status: pending           # pending | in_progress | completed
+  knowledge_candidates: []
+    # - type: null                # architecture | domain | integration | service | other
+    #   note: null
+    #   discovered_during: null   # DEV-01
   implementation_prs: []
     # - repository_id: null
     #   number: null
     #   url: null
-    #   status: null              # TODO: hosting-specific
+    #   status: null              # unused until application-PR phase
 
 knowledge_updates: []
   # - path: null                  # path under knowledge/

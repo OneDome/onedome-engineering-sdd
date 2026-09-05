@@ -1,7 +1,11 @@
 # Environment mapping. Policy lives in `.cursor/rules/sdd-governance.mdc`.
-# This phase: local code + Confluence read. No git, branches, or Jira status updates.
+# Spec/plan: local code + Confluence read. Git: SDD PRs via /sdd-pr; application
+# branches via /start-development after approved breakdown. No Jira status updates.
 
 schema_version: 1
+
+# SDD delivers backend services only. Frontend/UI is out of scope.
+surface: backend
 
 spec_kit:
   status: not_initialized
@@ -55,15 +59,15 @@ sources:
     workspace_root: /Users/oksanaodocuk/IdeaProjects
 
 git:
-  enabled: false                  # later phase: branches, PRs, status automation
-  branches: false
-  pull_requests: false
+  enabled: true                   # SDD PRs via /sdd-pr; app branches after breakdown approval
+  branches: true
+  pull_requests: true             # SDD repo only; do not open application PRs from this flow
   hosting: github
   host_url: https://github.com
   organization: OneDome
-  sdd_branch_pattern: null
-  implementation_branch_pattern: null
-  specification_pr_target_branch: null
+  sdd_branch_pattern: sdd/<JIRA-KEY>
+  implementation_branch_pattern: feature/<JIRA-KEY>   # example: feature/DEAL-2097
+  specification_pr_target_branch: main        # also the implementation base branch
 
 lifecycle:
   allowed_statuses:
@@ -80,14 +84,23 @@ lifecycle:
   gates:
     planning_requires:
       - specification.status == approved
+      - specification.approval.status == approved
     implementation_requires:
       - specification.status == approved
+      - specification.approval.status == approved
+      - planning.status == approved
+      - planning.approval.status == approved
+      # then /start-development; write application code only after
+      # development.decomposition.status == approved
+  # in_development / in_review are lifecycle values. Do not add
+  # implementation_complete to this list — that lives under development.status.
 
 approval:
-  specification_role: Team Lead
-  specification_method: task_state_file   # record in task-state.yaml; no Jira transition
-  planning_role: null
-  planning_method: null
+  specification_requires: explicit_human_approval
+  specification_method: chat_then_task_state  # human says затверджую / I approve this spec; agent records in task-state.yaml
+  planning_method: chat_then_task_state       # human says затверджую план / I approve this plan
+  development_breakdown_method: chat_then_task_state  # I approve the development breakdown
+  subtask_acceptance_method: chat_then_task_state     # I accept this subtask
 
 automation:
   status: not_implemented

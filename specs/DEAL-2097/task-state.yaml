@@ -1,0 +1,161 @@
+# Per-task machine-readable state.
+# Copy of templates/task-state.yaml for DEAL-2097.
+
+schema_version: 1
+
+jira:
+  key: DEAL-2097
+  title: OD Mortgage Sourcing Phase 5
+
+lifecycle:
+  status: in_review
+
+sdd:
+  branch: sdd/DEAL-2097
+
+specification:
+  status: approved
+  path: spec.md
+  pr:
+    repository: onedome-engineering-sdd
+    number: 1
+    url: https://github.com/OneDome/onedome-engineering-sdd/pull/1
+  approval:
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T17:19:00+03:00
+    method: chat
+    notes: Explicit phrase in chat: I approve this spec.
+
+planning:
+  status: approved
+  path: plan.md
+  pr:
+    repository: onedome-engineering-sdd
+    number: 1
+    url: https://github.com/OneDome/onedome-engineering-sdd/pull/1
+  approval:
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T17:31:00+03:00
+    method: chat
+    notes: Explicit phrase in chat: I approve this plan.
+
+repositories:
+  - id: hub-service
+    path: hub-service
+    branch: feature/DEAL-2097
+    impact: change
+    implementation_pr:
+      number: 389
+      url: https://github.com/OneDome/hub-service/pull/389
+  - id: integration-service
+    path: integration-service
+    branch: feature/DEAL-2097
+    impact: change
+    implementation_pr:
+      number: 200
+      url: https://github.com/OneDome/integration-service/pull/200
+
+development:
+  status: implementation_complete
+  developer: oksanaodocuk
+  started_at: 2026-09-05T18:12:32+03:00
+  decomposition:
+    status: approved
+    approved_by: oksanaodocuk
+    approved_at: 2026-09-05T18:12:32+03:00
+    method: chat
+  current_subtask: null
+  subtasks:
+    - id: DEV-01
+      title: Integration-service — Fact Find Client fields on sourcing payload
+      repositories:
+        - integration-service
+      acceptance_criteria:
+        - AC-002
+      depends_on: []
+      tests: Mapper tests for new FF attributes on ApplicantContactDto; no email/phone/address selected
+      status: completed
+    - id: DEV-02
+      title: Hub — expanded Client contract and CRM prefill mapping
+      repositories:
+        - hub-service
+      acceptance_criteria:
+        - AC-001
+        - AC-002
+        - AC-006
+      depends_on:
+        - DEV-01
+      tests: CrmToTwenty7TecMapper fills workbook-mapped SOAP Client groups; no non-SOAP Client fields
+      status: completed
+    - id: DEV-03
+      title: Hub — SOAP Applicant mapping, BR-003 slotting, mandatory Client check
+      repositories:
+        - hub-service
+      acceptance_criteria:
+        - AC-001
+        - AC-003
+        - AC-007
+      depends_on:
+        - DEV-02
+      tests: buildApplicant nested types; three-applicant slotting; missing mandatory field blocks runSource
+      status: completed
+    - id: DEV-04
+      title: Hub — opt-in affordability on search
+      repositories:
+        - hub-service
+      acceptance_criteria:
+        - AC-004
+        - AC-005
+      depends_on:
+        - DEV-03
+      tests: includeAffordabilityCheck off/on; affordabilitySource then results; join by LenderCode; four Hub-side filters
+      status: completed
+    - id: DEV-05
+      title: Hub — EoR uses same SourceInput; no EoA; BR-009
+      repositories:
+        - hub-service
+      acceptance_criteria:
+        - AC-008
+      depends_on:
+        - DEV-04
+      tests: buildEorInput succeeds with and without affordability; generateEoADocument not invoked
+      status: completed
+  knowledge_candidates:
+    - type: other
+      note: >-
+        config/repositories.yaml workspace.root is /Users/oksanaodocuk/IdeaProjects
+        but hub-service and integration-service live under
+        /Users/oksanaodocuk/IdeaProjects/oneDome (siblings of this SDD repo).
+      discovered_during: start-development
+    - type: integration
+      note: >-
+        DEAL-2097 Client-tab FF mapping workbook supplied as CSV (display names only).
+        CrmSourcingQuery is the sole sourcing FF query. Dataverse logical names for
+        Gender/Marital/Nationality/dependants/credit/outgoings remain TODO(dev).
+      discovered_during: DEV-01
+    - type: integration
+      note: >-
+        DEV-03 mandatory Client check uses evidenced Hub search fields only
+        (first name, last name, date of birth, employment status, applicant type)
+        on Applicant1/Applicant2. Remaining SOAP required=true nillable Client
+        fields and Sourcing API.pdf flags are TODO(dev). Empty-applicant remortgage
+        path (lender-only Applicant1) is not validated.
+      discovered_during: DEV-03
+    - type: integration
+      note: >-
+        AffordabilitySourceResult exposes Affordable and AffordabilityStatus as
+        booleans plus MaxBorrowing. Nuclino has four statuses. DEV-04 maps
+        affordable=true → Accept, false → Declined, missing lender result →
+        No information available. Partial accept is TODO(dev) pending Sourcing API.pdf.
+      discovered_during: DEV-04
+  implementation_prs:
+    - repository: hub-service
+      number: 389
+      url: https://github.com/OneDome/hub-service/pull/389
+    - repository: integration-service
+      number: 200
+      url: https://github.com/OneDome/integration-service/pull/200
+
+knowledge_updates: []

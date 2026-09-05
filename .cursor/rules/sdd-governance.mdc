@@ -5,22 +5,97 @@ alwaysApply: true
 
 # SDD governance
 
-This repository is the SDD control plane. Application behaviour lives in other repositories in the same workspace.
+This repository is the SDD control plane for **backend only**. Do not specify, plan, or implement frontend/UI work under SDD.
 
 ## Ownership
 
-- AI drafts `spec.md`. Humans own it. A Team Lead must approve it before planning or implementation.
-- Do not start `plan.md`, technical design, or code changes until `task-state.yaml` records `specification.status: approved`.
-- If asked to plan or implement without approval, refuse and point to the spec gate.
-- This phase: do not create git branches, remotes, or PRs. Do not update Jira statuses. Do not write to Confluence.
+- AI may generate and revise `spec.md`. AI must never approve its own specification.
+- Every specification must be explicitly approved by a **human reviewer**. The system does not care what organisational role that person holds.
+- The reviewer is responsible for having sufficient product/domain knowledge to validate business correctness.
+- Approval is an intentional action. Never infer it from conversational phrases such as "looks good", "fine", "lgtm", "ok", "ок", or similar wording. Explicit chat phrases: `затверджую` / `I approve this spec`, `I approve this plan`, `I approve the development breakdown`, `I accept this subtask`.
+- Do not start `plan.md` until `task-state.yaml` records `specification.status: approved` and `specification.approval.status: approved`.
+- Do not implement application code until spec and plan are approved **and** `development.decomposition.status` is `approved` (`I approve the development breakdown`). `/start-development` may propose DEV items before that.
+- If asked to plan without spec approval, or implement without those gates, refuse and point to the gate.
+- Do not change Jira statuses. Do not write to Confluence from SDD agents.
+- Git in **this** SDD repository: branches and PRs only when the human invokes `/sdd-pr` (or asks to open the SDD PR). Follow `.cursor/skills/sdd-pr/SKILL.md`. Title and body must contain the Jira issue key.
+- Git in **application** repositories: after an approved development breakdown, `/start-development` may create or reuse the implementation branch (`git.implementation_branch_pattern`, currently `feature/<JIRA-KEY>`). Follow `.cursor/skills/sdd-development/SKILL.md`. After `I accept this subtask`, commit that DEV’s application changes (one commit per listed repo that has files). Do not commit on `continue` before acceptance. Do not open application PRs. Do not push unless asked. Do not force push, hard-reset, or delete remote branches.
+
+## Human approval of a specification
+
+There is no `approve-spec` agent. The human approves **in this chat**. The agent then records that act in `specs/<JIRA-KEY>/task-state.yaml` and matching spec frontmatter. Recording is valid only when all of the following are true:
+
+1. The specification file exists.
+2. The specification is in a reviewable/draft (or in-review) state — not already approved.
+3. Blocking Open Questions have been resolved.
+4. The human explicitly requested approval in this conversation (not implied by casual agreement).
+5. A human identity can be recorded in `approval.approved_by`.
+6. The agent that drafted the spec does not set approval on its own and does not infer it from “ok”, “ок”, “fine”, “lgtm”, or similar.
+
+**How to approve:** the human writes an explicit phrase for this spec, for example `затверджую`, `затверджую цю спеку`, `I approve this spec`, or `approve DEAL-2097`.
+
+When those conditions hold, the agent **must** record (not refuse):
+
+- `spec.md` frontmatter: `status: approved`; `approval.status: approved`; `approved_by`; `approved_at`
+- `task-state.yaml`: `specification.status: approved`; `specification.approval.status: approved`; `approved_by`; `approved_at`; `method: chat`; `lifecycle.status: spec_approved`
+
+`approved_by`: use the name the human gives; otherwise the workspace OS username. Do not invent a different person. Do not store job title.
+
+Do not start planning in the same turn unless the human also asked to plan.
+
+## Human approval of a plan
+
+The human approves **in this chat**. The agent then records that act. Recording is valid only when all of the following are true:
+
+1. `plan.md` exists.
+2. The plan is draft or in review — not already approved.
+3. Blocking plan Open Questions have been resolved.
+4. The spec is already approved.
+5. The human writes an explicit phrase: `затверджую план`, `I approve this plan`.
+6. The agent does not infer approval from “ok”, “ок”, “допустимо”, “fine”, or “lgtm”.
+
+When those hold, record:
+
+- `plan.md` frontmatter: `status: approved`
+- `task-state.yaml`: `planning.status: approved`; `planning.approval.status: approved`; `approved_by`; `approved_at`; `method: chat`; `lifecycle.status: plan_approved`
+
+`approved_by`: name they give, else workspace OS username. Do not start implementation in the same turn unless they also asked to implement. After plan approval, tell the user they can attach artifacts to Jira with `/sdd-pr`, and start coding with `/start-development`.
+
+## Human approval of a development breakdown
+
+There is no development agent. `/start-development` proposes DEV-01…DEV-0n in chat. Recording is valid only when:
+
+1. Spec and plan are already approved; Open Questions are empty.
+2. A breakdown was proposed in this conversation (or a pending one is already in `task-state.yaml`).
+3. The human writes `I approve the development breakdown` (not `ok` / `ок` / `lgtm`).
+4. Then persist `development.decomposition`, create/reuse application branches, set `lifecycle.status: in_development`, and stop for `continue`.
+
+Do not regenerate an already approved breakdown on resume.
+
+## Human acceptance of a subtask
+
+After one DEV item is implemented and summarized, do **not** mark it completed until the human writes `I accept this subtask`. Then: commit the accepted subtask in each listed application repo; pick the next eligible DEV as `current_subtask`. When all DEV items are completed, they may run `/finish-development` (`lifecycle.status: in_review`; `development.status: implementation_complete`). Do not treat `implementation_complete` as a lifecycle enum value.
 
 ## Evidence over invention
 
 - Never invent missing business behaviour, repository names, Jira fields, statuses, URLs, branch conventions, or undocumented rules.
 - Missing or conflicting information becomes an Open Question in `spec.md` with `id`, `blocking`, and `evidence_tried`. Do not silently resolve it.
-- Jira is the source of task requirements when a key is given (read-only). Confluence is supporting evidence via Atlassian MCP (read-only). Both may be incomplete or wrong.
-- Source code is the source of truth for current behaviour. Inspect local checkouts listed in `config/repositories.yaml` (under `IdeaProjects`). Do not invent repositories.
+- After Human Review answers an Open Question, fold the answer into the spec body and **delete that OQ**. Do not leave Closed stubs or Q+A pairs in Open Questions. Unresolved items stay until answered.
+- Jira is a locator (key, title, Nuclino link, attachments). Ignore Jira labels. Requirements come from the Nuclino page linked on the task and from documents attached to the task or provided by the user.
+- Do not inspect application repositories until the user names them. Then inspect only those ids from `config/repositories.yaml`. Do not invent repositories.
+- Source code is the source of truth for current behaviour.
 - Every statement about existing behaviour should cite evidence when practical: Jira key, Confluence page id/URL, or local repository path.
+
+## TODO for the developer
+
+During implementation, if a detail is **not obvious from spec, plan, workbook, or current code** (Dataverse logical names, option-set codes, which nested SOAP type to fill, how to map an unmatched picklist):
+
+- Do **not** invent it.
+- Do **not** stop the whole subtask for that gap.
+- Implement the evidenced subset.
+- Mark the gap in code as `// TODO(dev): …` (what is missing, where to look: workbook row, SOAP type, existing query).
+- List every such TODO in the subtask summary under **TODO for developer**.
+
+PLAN DEVIATION is only for material HOW/WHAT breaks (wrong service, missing API, compatibility, spec contradiction) — not for local mapping details a developer can finish.
 
 ## Artifact roles
 
@@ -31,7 +106,10 @@ This repository is the SDD control plane. Application behaviour lives in other r
 
 ## Scope and knowledge
 
-- Consider cross-repository impact. List affected repositories using ids from `config/repositories.yaml`. If the relevant checkout is not listed, add an Open Question.
+- **Backend only.** Specs, plans, and later implementation cover server-side services, APIs, jobs, and backend business rules. Screens, SPA/portal UI, CSS, and client-only behaviour are out of scope.
+- If a ticket also mentions frontend, record it under Out of Scope (and an Open Question if a backend contract for that UI is missing). Do not write frontend requirements as work this process will deliver.
+- Frontend may appear as a **consumer** of a backend contract. Describe the observable backend behaviour, not how the UI should look or be built.
+- Consider cross-repository impact among **backend** checkouts the user names. List them using ids from `config/repositories.yaml`. If a named checkout is not listed, add an Open Question.
 - Reusable knowledge is added incrementally after tasks complete. Documentation coverage is not a prerequisite for using SDD.
 - Treat `knowledge/` as possibly stale. Verify material claims against code before relying on them.
 - Do not create domain agents or invent architecture docs.
