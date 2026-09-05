@@ -17,9 +17,9 @@ specification:
   status: approved
   path: spec.md
   pr:
-    repository: null
-    number: null
-    url: null
+    repository: onedome-engineering-sdd
+    number: 2
+    url: https://github.com/OneDome/onedome-engineering-sdd/pull/2
   approval:
     status: approved
     approved_by: oksanaodocuk
@@ -31,9 +31,9 @@ planning:
   status: approved
   path: plan.md
   pr:
-    repository: null
-    number: null
-    url: null
+    repository: onedome-engineering-sdd
+    number: 2
+    url: https://github.com/OneDome/onedome-engineering-sdd/pull/2
   approval:
     status: approved
     approved_by: oksanaodocuk
